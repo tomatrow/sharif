@@ -6,5 +6,5 @@ target 'sharif' do
   use_frameworks!
 
   # Pods for sharif
-  pod 'Eureka', '~> 4.0.1'
+  pod 'Eureka', '~> 4.1.1'
 end
