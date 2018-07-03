@@ -13,7 +13,54 @@ class EditViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        func singleDayInitializer(_ title: String) -> ((TimeInlineRow) -> Void) {
+            return { (row: TimeInlineRow) -> Void in
+                // see https://stackoverflow.com/a/26191260
+                // more so see https://stackoverflow.com/a/20158940
+                let date = Date()
+                let cal = Calendar(identifier: .gregorian)
+                let start = cal.startOfDay(for: date)
+                var components = DateComponents()
+                components.day = 1
+                components.second = -1
+                let end = cal.date(byAdding: components, to: start)
+
+                // $0.dateFormatter =
+                row.minimumDate = start
+                row.maximumDate = end
+                row.minuteInterval = 1
+                row.noValueDisplayText = ""
+                row.title = title
+            }
+        }
+
+        form +++ Section("Shift")
+            <<< TimeInlineRow("Start", singleDayInitializer("Start"))
+            <<< TimeInlineRow("End", singleDayInitializer("End"))
+            +++ MultivaluedSection(multivaluedOptions: [.Reorder, .Insert, .Delete],
+                                   header: "Break",
+                                   footer: "A series of breaks lengths") {
+                $0.addButtonProvider = { _ in
+                    ButtonRow {
+                        $0.title = "Add New Break"
+                    }
+                }
+                $0.multivaluedRowToInsertAt = { _ in
+                    IntRow {
+                        $0.placeholder = "0"
+                    }
+                }
+            }
+            +++ Section("Task")
+            <<< SwitchRow {
+                $0.title = "quarter"
+            }
+            <<< SwitchRow {
+                $0.title = "half"
+            }
+            <<< SwitchRow {
+                $0.title = "full"
+            }
     }
 
     override func didReceiveMemoryWarning() {
