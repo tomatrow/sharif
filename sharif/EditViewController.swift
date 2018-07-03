@@ -6,9 +6,10 @@
 //  Copyright © 2018 optional(default). All rights reserved.
 //
 
+import Eureka
 import UIKit
 
-class EditViewController: UIViewController {
+class EditViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
